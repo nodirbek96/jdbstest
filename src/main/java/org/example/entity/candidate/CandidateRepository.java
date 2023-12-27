@@ -109,11 +109,32 @@ public class CandidateRepository implements CandidateCallbacks {
 
     @Override
     public Candidate updateCandidate(Candidate candidate) {
-        return null;
+        Candidate updatedCandidate = null;
+        connection = DBConnection.makeConnection();
+        try {
+            if (connection.isClosed())
+                connection = DBConnection.makeConnection();
+            String query = "UPDATE candidates SET firstname='" + candidate.getFirstname() + "', " +
+                    "lastname='" + candidate.getLastname() + "', middlename='" + candidate.getMiddleName() + "', " +
+                    "birthdate='" + Date.valueOf(candidate.getBirthDate()) + "', address='" + candidate.getAddress() + "', " +
+                    "phone='" + candidate.getPhone() + "', job_place='" + candidate.getJobPlace() + "', occupation='" + candidate.getOccupation() + "', " +
+                    "education_place='" + candidate.getEducationPlace() + "', education='" + candidate.getEducationPlace() + "', " +
+                    "relative='" + candidate.getRelative() + "', position='" + candidate.getPosition() + "', passport='" + candidate.getPassport() + "', " +
+                    "end_date='" + Date.valueOf(candidate.getEndDate()) + "', result='" + candidate.getResult() + "' " +
+                    "WHERE id='" + candidate.getId() + "'";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.execute();
+            updatedCandidate = candidate;
+        } catch (SQLException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return updatedCandidate;
     }
 
     @Override
     public Candidate getCandidateById(Integer id) {
+        connection = DBConnection.makeConnection();
+
         return null;
     }
 
