@@ -4,9 +4,9 @@ import java.util.List;
 
 public interface UserTableCallbacks {
     boolean createUserTable();
-    UserDto insertUser(UserDto userDto);
-    UserDto updateUser(UserDto userDto);
+    User insertUser(User user);
+    User updateUser(User user);
     boolean deleteUser(Integer id);
-    UserDto getUser(Integer id);
-    List<UserDto> getAllUsers();
+    User getUser(Integer id);
+    List<User> getAllUsers();
 }

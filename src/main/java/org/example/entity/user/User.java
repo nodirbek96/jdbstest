@@ -2,7 +2,7 @@ package org.example.entity.user;
 
 import java.time.LocalDateTime;
 
-public class UserDto {
+public class User {
     private Integer id;
     private String firstname;
     private String lastname;
@@ -10,10 +10,10 @@ public class UserDto {
     private String password;
     private LocalDateTime createdDateTime;
 
-    public UserDto() {
+    public User() {
     }
 
-    public UserDto(Integer id, String firstname, String lastname, String username, String password) {
+    public User(Integer id, String firstname, String lastname, String username, String password) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -21,14 +21,14 @@ public class UserDto {
         this.password = password;
     }
 
-    public UserDto(String firstname, String lastname, String username, String password) {
+    public User(String firstname, String lastname, String username, String password) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.username = username;
         this.password = password;
     }
 
-    public UserDto(Integer id, String firstname, String lastname, String username, String password, LocalDateTime createdDateTime) {
+    public User(Integer id, String firstname, String lastname, String username, String password, LocalDateTime createdDateTime) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;

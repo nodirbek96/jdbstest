@@ -1,6 +1,7 @@
 package org.example;
 
-import org.example.entity.user.UserDto;
+import org.example.entity.candidate.CandidateCallbacks;
+import org.example.entity.candidate.CandidateRepository;
 import org.example.entity.user.UserRepository;
 import org.example.entity.user.UserTableCallbacks;
 
@@ -18,5 +19,7 @@ public class Main {
 //        System.out.println(userTableCallbacks.getUser(4));
 //        System.out.println(userTableCallbacks.updateUser(new UserDto(3, "111", "Sodiqov", "akissdasdsdh", "32ss615")).toString());
 
+        CandidateCallbacks candidateCallbacks = new CandidateRepository();
+        candidateCallbacks.createCandidateTable();
     }
 }

@@ -37,19 +37,19 @@ public class UserRepository implements UserTableCallbacks {
     }
 
     @Override
-    public UserDto insertUser(UserDto userDto) {
+    public User insertUser(User user) {
         connection = DBConnection.makeConnection();
-        UserDto insertedUserDto = null;
+        User insertedUser = null;
         try {
             if (connection.isClosed())
                 connection = DBConnection.makeConnection();
             String query = "INSERT INTO users(firstname,lastname,username,password) " +
                     "VALUES(?,?,?,?) ";
             PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, userDto.getFirstname());
-            preparedStatement.setString(2, userDto.getLastname());
-            preparedStatement.setString(3, userDto.getUsername());
-            preparedStatement.setString(4, userDto.getPassword());
+            preparedStatement.setString(1, user.getFirstname());
+            preparedStatement.setString(2, user.getLastname());
+            preparedStatement.setString(3, user.getUsername());
+            preparedStatement.setString(4, user.getPassword());
             preparedStatement.execute();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -57,41 +57,41 @@ public class UserRepository implements UserTableCallbacks {
                 query = "SELECT * FROM users WHERE id='" + id + "'";
                 preparedStatement = connection.prepareStatement(query);
                 resultSet = preparedStatement.executeQuery();
-                insertedUserDto = new UserDto();
+                insertedUser = new User();
                 while (resultSet.next()) {
-                    insertedUserDto.setId(resultSet.getInt(1));
-                    insertedUserDto.setFirstname(resultSet.getString(2));
-                    insertedUserDto.setLastname(resultSet.getString(3));
-                    insertedUserDto.setUsername(resultSet.getString(4));
-                    insertedUserDto.setPassword(resultSet.getString(5));
-                    insertedUserDto.setCreatedDateTime(resultSet.getTimestamp(6).toLocalDateTime());
+                    insertedUser.setId(resultSet.getInt(1));
+                    insertedUser.setFirstname(resultSet.getString(2));
+                    insertedUser.setLastname(resultSet.getString(3));
+                    insertedUser.setUsername(resultSet.getString(4));
+                    insertedUser.setPassword(resultSet.getString(5));
+                    insertedUser.setCreatedDateTime(resultSet.getTimestamp(6).toLocalDateTime());
                 }
             }
         } catch (SQLException e) {
             System.out.println(e.getLocalizedMessage());
         }
-        return insertedUserDto;
+        return insertedUser;
     }
 
     @Override
-    public UserDto updateUser(UserDto userDto) {
-        UserDto updatedUserDto = null;
+    public User updateUser(User user) {
+        User updatedUser = null;
         connection = DBConnection.makeConnection();
         try {
             if (connection.isClosed())
                 connection = DBConnection.makeConnection();
-            String query = "UPDATE users SET firstname='" + userDto.getFirstname() +
-                    "',lastname='" + userDto.getLastname() +
-                    "',username='" + userDto.getUsername() +
-                    "',password='" + userDto.getPassword() +
-                    "' WHERE id='" + userDto.getId() + "'";
+            String query = "UPDATE users SET firstname='" + user.getFirstname() +
+                    "',lastname='" + user.getLastname() +
+                    "',username='" + user.getUsername() +
+                    "',password='" + user.getPassword() +
+                    "' WHERE id='" + user.getId() + "'";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.execute();
-            updatedUserDto = userDto;
+            updatedUser = user;
         } catch (SQLException e) {
             System.out.println(e.getLocalizedMessage());
         }
-        return updatedUserDto;
+        return updatedUser;
     }
 
     @Override
@@ -111,8 +111,8 @@ public class UserRepository implements UserTableCallbacks {
     }
 
     @Override
-    public UserDto getUser(Integer id) {
-        UserDto userDto = null;
+    public User getUser(Integer id) {
+        User user = null;
         connection = DBConnection.makeConnection();
         try {
             if (connection.isClosed())
@@ -121,7 +121,7 @@ public class UserRepository implements UserTableCallbacks {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                userDto = new UserDto(
+                user = new User(
                         resultSet.getInt(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
@@ -133,12 +133,12 @@ public class UserRepository implements UserTableCallbacks {
         } catch (SQLException e) {
             System.out.println(e.getLocalizedMessage());
         }
-        return userDto;
+        return user;
     }
 
     @Override
-    public List<UserDto> getAllUsers() {
-        List<UserDto> list = null;
+    public List<User> getAllUsers() {
+        List<User> list = null;
         connection = DBConnection.makeConnection();
         try {
             if (connection.isClosed())
@@ -148,14 +148,14 @@ public class UserRepository implements UserTableCallbacks {
             ResultSet resultSet = preparedStatement.executeQuery();
             list = new ArrayList<>();
             while (resultSet.next()) {
-                UserDto userDto = new UserDto(
+                User user = new User(
                         resultSet.getInt(1),
                         resultSet.getString(2),
                         resultSet.getString(3),
                         resultSet.getString(4),
                         resultSet.getString(5),
                         resultSet.getTimestamp(6).toLocalDateTime());
-                list.add(userDto);
+                list.add(user);
             }
 
         } catch (SQLException e) {
