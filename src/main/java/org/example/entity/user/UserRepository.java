@@ -163,4 +163,22 @@ public class UserRepository implements UserTableCallbacks {
         }
         return list;
     }
+
+    @Override
+    public boolean checkUser(String username, String password) {
+        boolean status;
+        connection = DBConnection.makeConnection();
+        try {
+            if (connection.isClosed())
+                connection = DBConnection.makeConnection();
+            String query = "SELECT * FROM users WHERE username='" + username + "' AND password='" + password + "'";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            status = resultSet.next();
+        } catch (SQLException e) {
+            status = false;
+            System.out.println(e.getLocalizedMessage());
+        }
+        return status;
+    }
 }

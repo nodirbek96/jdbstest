@@ -172,39 +172,45 @@ public class CandidateRepository implements CandidateCallbacks {
 
     @Override
     public List<Candidate> getAllCandidates() {
-        List<Candidate> list = null;
+        List<Candidate> list;
         connection = DBConnection.makeConnection();
         try {
             if (connection.isClosed())
                 connection = DBConnection.makeConnection();
-            String query = "SELECT * FROM candidates";
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            list = new ArrayList<>();
-            while (resultSet.next()) {
-                list.add(new Candidate(
-                        resultSet.getInt(1),
-                        resultSet.getInt(2),
-                        resultSet.getString(3),
-                        resultSet.getString(4),
-                        resultSet.getString(5),
-                        resultSet.getDate(6).toLocalDate(),
-                        resultSet.getString(7),
-                        resultSet.getString(8),
-                        resultSet.getString(9),
-                        resultSet.getString(10),
-                        resultSet.getString(11),
-                        resultSet.getString(12),
-                        resultSet.getString(13),
-                        resultSet.getString(14),
-                        resultSet.getString(15),
-                        resultSet.getDate(16).toLocalDate(),
-                        resultSet.getString(18),
-                        resultSet.getTimestamp(19).toLocalDateTime()
-                ));
-            }
+            String query = "SELECT * FROM candidates ORDER BY id DESC ";
+            list = getCandidates(query);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+        return list;
+    }
+
+    private List<Candidate> getCandidates(String query) throws SQLException {
+        List<Candidate> list;
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        list = new ArrayList<>();
+        while (resultSet.next()) {
+            list.add(new Candidate(
+                    resultSet.getInt(1),
+                    resultSet.getInt(2),
+                    resultSet.getString(3),
+                    resultSet.getString(4),
+                    resultSet.getString(5),
+                    resultSet.getDate(6).toLocalDate(),
+                    resultSet.getString(7),
+                    resultSet.getString(8),
+                    resultSet.getString(9),
+                    resultSet.getString(10),
+                    resultSet.getString(11),
+                    resultSet.getString(12),
+                    resultSet.getString(13),
+                    resultSet.getString(14),
+                    resultSet.getString(15),
+                    resultSet.getDate(16).toLocalDate(),
+                    resultSet.getString(18),
+                    resultSet.getTimestamp(19).toLocalDateTime()
+            ));
         }
         return list;
     }
@@ -216,7 +222,7 @@ public class CandidateRepository implements CandidateCallbacks {
         try {
             if (connection.isClosed())
                 connection = DBConnection.makeConnection();
-            String query = "DELETE FROM candidates where id='" + id + "'";
+            String query = "DELETE FROM candidates WHERE id='" + id + "'";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.execute();
             status = true;
@@ -225,4 +231,66 @@ public class CandidateRepository implements CandidateCallbacks {
         }
         return status;
     }
+
+    @Override
+    public List<Candidate> searchByFirstFirstnameOrLastnameOrMiddlename(String suffix) {
+        List<Candidate> list = null;
+        connection = DBConnection.makeConnection();
+        try {
+            if (connection.isClosed())
+                connection = DBConnection.makeConnection();
+            String query = "SELECT * FROM candidates WHERE firstname LIKE '%" + suffix + "%' OR lastname LIKE '%" + suffix + "%' OR middlename LIKE '%" + suffix + "%'";
+            list = getCandidates(query);
+        } catch (SQLException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return list;
+    }
+
+    @Override
+    public List<Candidate> searchByPhoneOrPassport(String suffix) {
+        List<Candidate> list = null;
+        connection = DBConnection.makeConnection();
+        try {
+            if (connection.isClosed())
+                connection = DBConnection.makeConnection();
+            String query = "SELECT * FROM candidates WHERE phone LIKE '%" + suffix + "%' OR passport LIKE '%"+suffix+"%'";
+            list = getCandidates(query);
+        } catch (SQLException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return list;
+    }
+
+    @Override
+    public List<Candidate> searchByJobPlaceOrOccupationOrEducationOrPosition(String suffix) {
+        List<Candidate> list = null;
+        connection = DBConnection.makeConnection();
+        try {
+            if (connection.isClosed())
+                connection = DBConnection.makeConnection();
+            String query = "SELECT * FROM candidates WHERE job_place LIKE '%" + suffix + "%' OR occupation LIKE '%"+suffix+"%' OR education LIKE '%"+suffix+"%' OR " +
+                    " position LIKE '%"+suffix+"%'";
+            list = getCandidates(query);
+        } catch (SQLException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return list;
+    }
+
+    @Override
+    public List<Candidate> searchByBirthDate(String suffix) {
+        List<Candidate> list = null;
+        connection = DBConnection.makeConnection();
+        try {
+            if (connection.isClosed())
+                connection = DBConnection.makeConnection();
+            String query = "SELECT * FROM candidates WHERE birthdate LIKE '%" + suffix + "%'";
+            list = getCandidates(query);
+        } catch (SQLException e) {
+            System.out.println(e.getLocalizedMessage());
+        }
+        return list;
+    }
+
 }

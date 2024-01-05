@@ -9,4 +9,5 @@ public interface UserTableCallbacks {
     boolean deleteUser(Integer id);
     User getUser(Integer id);
     List<User> getAllUsers();
+    boolean checkUser(String username,String password);
 }
