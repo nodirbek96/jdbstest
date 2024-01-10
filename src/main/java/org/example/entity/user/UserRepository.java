@@ -101,7 +101,7 @@ public class UserRepository implements UserTableCallbacks {
         try {
             if (connection.isClosed())
                 connection = DBConnection.makeConnection();
-            String query = "DELETE FROM users where id='" + id + "'";
+            String query = "DELETE FROM users WHERE id='" + id + "'";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             status = preparedStatement.execute();
         } catch (SQLException e) {
@@ -117,7 +117,7 @@ public class UserRepository implements UserTableCallbacks {
         try {
             if (connection.isClosed())
                 connection = DBConnection.makeConnection();
-            String query = "SELECT * FROM users where id='" + id + "'";
+            String query = "SELECT * FROM users WHERE id='" + id + "'";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
